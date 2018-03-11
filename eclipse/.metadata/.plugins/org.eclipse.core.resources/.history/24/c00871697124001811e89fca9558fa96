@@ -1,0 +1,26 @@
+package xyz.sethy.cd.listener;
+
+import java.util.HashMap;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+
+public class PlayerInteractListener {
+	private final Map<Material, Float> waterInFood;
+	
+	public PlayerInteractListener() {
+		this.waterInFood = new HashMap<Mater, Float>();
+	}
+	
+	@ForgeSubscribe
+	public void onPlayerInteract(final PlayerInteractEvent event) {
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		if (event.getResult().equals(event.useItem)) {
+			if (player.getItemInUseDuration() == 1) {
+				Minecraft.getMinecraft().getLogAgent().logInfo("Player has eaten " + player.getItemInUse().getDisplayName());
+			}
+		}
+	}
+}

@@ -1,0 +1,5 @@
+package xyz.sethy.cd.packet;
+
+public class WaterPacketHandler {
+
+}

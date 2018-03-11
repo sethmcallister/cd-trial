@@ -1,0 +1,8 @@
+package xyz.sethy.cd.listener;
+
+public class PlayerInteractListener {
+	@ForgeSubscribe
+	public void onPlayerInteract(final PlayerInteractEvent event) {
+		
+	}
+}

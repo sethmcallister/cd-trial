@@ -1,0 +1,8 @@
+package xyz.sethy.cd.listener;
+
+public class ServerTickListener {
+	@ForgeSubscribe
+	public void onServerTick(final TickEvent.ServerTickEvent event) {
+		
+	}
+}

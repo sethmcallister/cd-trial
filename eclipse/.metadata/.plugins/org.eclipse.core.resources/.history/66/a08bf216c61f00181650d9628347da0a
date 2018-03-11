@@ -1,0 +1,32 @@
+package xyz.sethy.cd.task;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityClientPlayerMP;
+import xyz.sethy.cd.extended.ExtendedPlayer;
+
+public class CheckPlayerLocationTask implements Runnable {
+	private final float waterLossPerBlock = 0.3f;
+	
+	private int lastX;
+	private int lastZ;
+	
+	@Override
+	public void run() {
+		EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
+	
+		int x = player.getPlayerCoordinates().posX;
+		int z = player.getPlayerCoordinates().posZ;
+		
+		if (lastX == x || lastZ == z)
+			return;
+		
+		int movedX = Math.abs(lastX - x);
+		int movedZ = Math.abs(lastZ - z);
+		
+		int movedTotal = movedX + movedZ;
+
+		float waterToRemove = Math.floorMod(movedTotal, waterLossPerBlock);
+		
+		ExtendedPlayer extendedPlayer = ExtendedPlayer.get(player);
+	}
+}

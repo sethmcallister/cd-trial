@@ -1,0 +1,11 @@
+package xyz.sethy.cd.listener;
+
+import net.minecraftforge.event.ForgeSubscribe;
+
+public class ItemUseListener {
+	
+	@ForgeSubscribe
+	public void onItemUse(final PlayerUseItemEvent event) {
+		
+	}
+}`

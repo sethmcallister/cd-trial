@@ -1,0 +1,24 @@
+package xyz.sethy.cd.task;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityClientPlayerMP;
+
+public class CheckPlayerLocationTask implements Runnable {
+	private final float waterLossPerBlock = 0.3f;
+	
+	private int lastX;
+	private int lastZ;
+	
+	@Override
+	public void run() {
+		EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
+	
+		int x = player.getPlayerCoordinates().posX;
+		int z = player.getPlayerCoordinates().posZ;
+		
+		if (lastX == x || lastZ == z)
+			return;
+		
+		int movedX = Math.abs(lastX - x);
+	}
+}
