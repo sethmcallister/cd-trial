@@ -3,6 +3,7 @@ package xyz.sethy.cd;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
+import xyz.sethy.cd.exercise.ExerciseLearner;
 import xyz.sethy.cd.gui.WaterGUI;
 import xyz.sethy.cd.listener.EntityConstructingListener;
 import xyz.sethy.cd.listener.EntityJoinWorldListener;
@@ -27,14 +28,31 @@ import cpw.mods.fml.common.network.NetworkMod;
 public class Main {
     public static final String MODID = "CD";
     public static final String VERSION = "1.0";
-    public static final Logger LOGGER = Logger.getLogger(MODID);    
+    public static final Logger LOGGER = Logger.getLogger(MODID); 
+    private static Main instance;
+    private ExerciseLearner exerciseLearner;
     
     @EventHandler
     public void init(FMLInitializationEvent event) {
+    	setInstance(this);
+    	this.exerciseLearner = new ExerciseLearner();
+    	
     	MinecraftForge.EVENT_BUS.register(new WaterGUI());
     	MinecraftForge.EVENT_BUS.register(new EntityConstructingListener());
     	MinecraftForge.EVENT_BUS.register(new EntityJoinWorldListener());
     	MinecraftForge.EVENT_BUS.register(new PlayerInteractListener());
     	MinecraftForge.EVENT_BUS.register(new PlayerBlockBreakListener());
+    }
+   
+    private static void setInstance(Main newInstance) {
+    	instance = newInstance;
+    }
+    
+    public static Main getInstance() {
+    	return instance;
+    }
+    
+    public ExerciseLearner getExerciseLearner() {
+    	return this.exerciseLearner;
     }
 }

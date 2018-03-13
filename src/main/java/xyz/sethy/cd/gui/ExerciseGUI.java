@@ -15,6 +15,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.EventPriority;
 import net.minecraftforge.event.ForgeSubscribe;
+import xyz.sethy.cd.Main;
 import xyz.sethy.cd.extended.ExtendedPlayer;
 
 @SideOnly(Side.CLIENT)
@@ -122,11 +123,13 @@ public class ExerciseGUI extends Gui {
 		// Adds both of the aforementioned variables
 		int movedTotal = movedX + movedZ;
 		
+		Main.getInstance().getExerciseLearner().getBlocksWalked().addAndGet(movedTotal);
+		
 		// Get the multiplier of the biome they are in, or return 1 as, 1 multiplied by a value is the initial value
 		float multiplier = getMultiplier(player, x, z);
 		
 		// Calculates how much water was used by calculating how many blocks they had a moved, and then multiplying that by how water is removed by block of movement, and then multiplied depending on what biome they are in
-		float energyUsed = (movedTotal * energyLossPerBlock) * multiplier;
+		float energyUsed = Main.getInstance().getExerciseLearner().getBlockWalkToUseEnergy() * movedTotal;
 	
 		// Gets the ExtendedPlayer object associated with the player
 		ExtendedPlayer extendedPlayer = ExtendedPlayer.get(player);
