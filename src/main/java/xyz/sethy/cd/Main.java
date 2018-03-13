@@ -22,7 +22,7 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 
-@NetworkMod(clientSideRequired=true, serverSideRequired=false, channels = {"water"}, packetHandler = WaterPacketHandler.class)
+@NetworkMod(clientSideRequired=true, serverSideRequired=false, channels = {"extendedPlayer"}, packetHandler = WaterPacketHandler.class)
 @Mod(modid = Main.MODID, name = Main.MODID, version = Main.VERSION)
 public class Main {
     public static final String MODID = "CD";

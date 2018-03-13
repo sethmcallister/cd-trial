@@ -25,6 +25,11 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
 	private float waterLevel;
 	// A float that is the max water that a player can have, this means it can be changed (Armour means they can drink more water)
 	private float maxWaterLevel;
+	
+	// A float that is the players current exercise level
+	private float exerciseLevel;
+	// A float that is the players maximum exercise level
+	private float maxExerciseLevel;
 
 	// Class constructor, has the accepts the parameter of EntityPlayer
 	public ExtendedPlayer(final EntityPlayer player) {
@@ -34,6 +39,9 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
 		this.waterLevel = 20f;
 		// Assigns the players max water level to the float value of 20
 		this.maxWaterLevel = 20f;
+		
+		this.exerciseLevel = 20f;
+		this.maxExerciseLevel = 20f;
 		
 		// Register an extended property within the player object, the name of EXT_PROP_NAME, and this an instance of this class
 		player.registerExtendedProperties(EXT_PROP_NAME, this);
@@ -69,8 +77,16 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
 	
 	public boolean useWater(final float amount) {
 		this.waterLevel -= amount;
-		if (amount < 0) {
+		if (this.waterLevel < 0) {
 			this.waterLevel = 0.0f;
+		}
+		return true;
+	}
+	
+	public boolean useExerciseEnergy(final float amount) {
+		this.exerciseLevel -= amount;
+		if (this.waterLevel < 0) {
+			this.exerciseLevel = 0.0f;
 		}
 		return true;
 	}
@@ -95,6 +111,22 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
 		this.maxWaterLevel = level;
 	}
 	
+	public float getCurrentExerciseLevel() {
+		return this.exerciseLevel;
+	}
+	
+	public void setCurrentExerciseLevel(final float level) {
+		this.exerciseLevel = level < this.maxExerciseLevel ? level : this.maxExerciseLevel;
+	}
+	
+	public float getMaxExerciseLevel() {
+		return this.maxExerciseLevel;
+	}
+	
+	public void setMaxExerciseLevel(final float level) {
+		this.maxExerciseLevel = level;
+	}
+	
 	public void sync() {
 		if(player.worldObj.isRemote)
 			return;
@@ -107,13 +139,15 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
 		try {
 			dataOutputStream.writeFloat(this.maxWaterLevel);
 			dataOutputStream.writeFloat(this.waterLevel);
+			dataOutputStream.writeFloat(this.maxExerciseLevel);
+			dataOutputStream.writeFloat(this.exerciseLevel);
 			outputStream.close();
 			dataOutputStream.close();
 		} catch (Exception e) {
 			Main.LOGGER.log(Level.SEVERE, e.getMessage(), e.getCause());
 		}
 		
-		Packet250CustomPayload packet = new Packet250CustomPayload("water", outputStream.toByteArray());
+		Packet250CustomPayload packet = new Packet250CustomPayload("extendedPlayer", outputStream.toByteArray());
 		PacketDispatcher.sendPacketToPlayer(packet, (Player)playerMP);
 	}
 }

@@ -29,7 +29,7 @@ public class PlayerInteractListener {
 	public void onPlayerInteract(final PlayerInteractEvent event) {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if (event.getResult().equals(event.useItem)) {
-			if (player.getItemInUseDuration() == 1) {
+			if (player.getItemInUseDuration() == 1 && player.isEating()) {
 				ItemStack itemInUse = player.getItemInUse();
 				if (itemInUse.itemID == 282) {
 					if (isDrinkingWater()) {

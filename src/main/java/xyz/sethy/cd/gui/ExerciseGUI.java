@@ -18,21 +18,22 @@ import net.minecraftforge.event.ForgeSubscribe;
 import xyz.sethy.cd.extended.ExtendedPlayer;
 
 @SideOnly(Side.CLIENT)
-public class WaterGUI extends Gui {
+public class ExerciseGUI extends Gui {
 	// Creates a static final variable of a ResourceLocaton that is the texture water bar
 	private static final ResourceLocation resourceLocation = new ResourceLocation("CD", "water_bar.png");
 	// Creates a final float which is how much water is lost when they water a full block.
-	private final float waterLossPerBlock = 0.09f;
+	private final float energyLossPerBlock = 0.09f;
 	private final float sandBiomeMultiplier = 1.08f;
 	private final float snowBiomeMultiplier = 0.78f;
-	private final float waterNeededToSprint = 3.1f;
+	private final float energyNeededToSprint = 0.6f;
 	
 	// Variables to be used in the calculation of how many blocks they have walked.
 	private int lastX = Integer.MAX_VALUE;
-	private int lastZ = Integer.MAX_VALUE;	
+	private int lastZ = Integer.MAX_VALUE;
+	
 	private long lastDamageTime = 0l;
 	
-	public WaterGUI() {
+	public ExerciseGUI() {
 		super();
 	}
 	
@@ -57,16 +58,16 @@ public class WaterGUI extends Gui {
 		doPlayerLocationChecks(entityPlayer);
 		
 		// Assign as a local variable, to save latency getting from another class.
-		float waterLevel = player.getCurrentWaterLevel();
+		float exerciseLevel = player.getCurrentExerciseLevel();
 		
 		// Send a message to a player every time they're water level gets to a multiple of 3.
-		if ((waterLevel % 3) == 1) {
+		if (exerciseLevel == 3.0f) {
 			// Send a message to the player alerting them of their water level getting low.
-			entityPlayer.addChatMessage("You are becoming lower on water, consider having something to drink.");
+			entityPlayer.addChatMessage("You are becoming tried; please consider taking a break; or having something to eat.");
 		}
 		
 		// Check if the currentWaterLevel is less than 0, if so return to prevent a divide by 0 exception
-		if (waterLevel < 0) {
+		if (exerciseLevel < 0) {
 			return;
 		}
 		
@@ -90,7 +91,10 @@ public class WaterGUI extends Gui {
 	}
 	
 	
-	private void doPlayerLocationChecks(EntityPlayer player) {		
+	private void doPlayerLocationChecks(EntityPlayer player) {
+		if (!player.isSprinting())
+			return;
+		
 		// Creates a local variable called x which is assigned to the players current x coordinate
 		int x = player.getPlayerCoordinates().posX;
 		// Creates a local variable called z which is assigned to the players current z coordinate
@@ -110,15 +114,6 @@ public class WaterGUI extends Gui {
 		if (lastX == x && lastZ == z)
 			return; // Will return the last executed line of code (before this function was called)
 		
-		// Gets the ExtendedPlayer object associated with the player
-		ExtendedPlayer extendedPlayer = ExtendedPlayer.get(player);
-		
-		float waterLevel = extendedPlayer.getCurrentWaterLevel();
-		if (waterLevel < 0) {
-			player.addChatMessage("You're in critical condition, you cannot move any further until you drink.");
-			return;
-		}
-		
 		// Assigned the movedX variable to the distance they have travelled across the X coordinates (Math.abs makes this integer positive if it is negative, makes it easier to work with later on)
 		int movedX = Math.abs(lastX - x);
 		// Same as line 98, however, for the Z coordinate
@@ -131,19 +126,23 @@ public class WaterGUI extends Gui {
 		float multiplier = getMultiplier(player, x, z);
 		
 		// Calculates how much water was used by calculating how many blocks they had a moved, and then multiplying that by how water is removed by block of movement, and then multiplied depending on what biome they are in
-		float waterUsed = (movedTotal * waterLossPerBlock) * multiplier;
+		float energyUsed = (movedTotal * energyLossPerBlock) * multiplier;
+	
+		// Gets the ExtendedPlayer object associated with the player
+		ExtendedPlayer extendedPlayer = ExtendedPlayer.get(player);
 		
 		// Calls the useWater method from inside the ExtenedPlayer object
-		extendedPlayer.useWater(waterUsed);
-		
-		if (waterLevel < this.waterNeededToSprint && player.isSprinting()) {
+		extendedPlayer.useExerciseEnergy(energyUsed);
+	
+		float exerciseLevel = extendedPlayer.getCurrentExerciseLevel();
+		if (exerciseLevel < energyNeededToSprint) {
 			player.setSprinting(false);
 		}
 		
-		if (waterLevel < 1.0f) {
-			if ((System.currentTimeMillis() - this.lastDamageTime) >= TimeUnit.SECONDS.toMillis(1)) {
+		if (exerciseLevel < 1.0f) {
+			if ((System.currentTimeMillis() - this.lastDamageTime) >= TimeUnit.SECONDS.toMillis(2)) {
 				player.performHurtAnimation();
-				player.setHealth(player.getHealth() - 2);
+				player.setHealth(player.getHealth() - 1);
 			}
 		}
 		

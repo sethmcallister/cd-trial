@@ -17,7 +17,7 @@ public class WaterPacketHandler implements IPacketHandler {
 
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
-		if (packet.channel.equals("water")) {
+		if (packet.channel.equals("extendedPlayer")) {
 			handleExtendedPlayer(packet, player);
 		}
 	}
@@ -29,6 +29,8 @@ public class WaterPacketHandler implements IPacketHandler {
 		try {
 			extendedPlayer.setMaxWaterLevel(inputStream.readFloat());
 			extendedPlayer.setCurrentWaterLevel(inputStream.readFloat());
+			extendedPlayer.setMaxExerciseLevel(inputStream.readFloat());
+			extendedPlayer.setCurrentExerciseLevel(inputStream.readFloat());
 			inputStream.close();
 		} catch (IOException e) {
 			Main.LOGGER.log(Level.SEVERE, e.getMessage(), e.getCause());
