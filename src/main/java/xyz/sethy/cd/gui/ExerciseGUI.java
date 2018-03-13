@@ -22,9 +22,9 @@ public class ExerciseGUI extends Gui {
 	// Creates a static final variable of a ResourceLocaton that is the texture water bar
 	private static final ResourceLocation resourceLocation = new ResourceLocation("CD", "water_bar.png");
 	// Creates a final float which is how much water is lost when they water a full block.
-	private final float energyLossPerBlock = 0.09f;
-	private final float sandBiomeMultiplier = 1.08f;
-	private final float snowBiomeMultiplier = 0.78f;
+	private final float energyLossPerBlock = 0.008f;
+	private final float sandBiomeMultiplier = 1.03f;
+	private final float snowBiomeMultiplier = 0.25f;
 	private final float energyNeededToSprint = 0.6f;
 	
 	// Variables to be used in the calculation of how many blocks they have walked.
