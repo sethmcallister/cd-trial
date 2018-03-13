@@ -5,15 +5,26 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.BlockEvent;
+import xyz.sethy.cd.Main;
 import xyz.sethy.cd.extended.ExtendedPlayer;
 
 public class PlayerBlockBreakListener {
 	private final float removePerBlockBreak = 0.07f;
+	private final float energyNeededToBreak = 1f;
 	
 	@ForgeSubscribe
 	public void onPlayerBlockBreak(final BlockEvent event) {
 		ExtendedPlayer player = ExtendedPlayer.get(Minecraft.getMinecraft().thePlayer);
+		
+		if (player.getCurrentExerciseLevel() < this.energyNeededToBreak) {
+			event.setCanceled(true);
+			return;
+		}
 		player.useWater(removePerBlockBreak);
-		Minecraft.getMinecraft().getLogAgent().logInfo("Player broke a block, and removed water.");
+		
+		Main.getInstance().getExerciseLearner().getBlockedPlaced().addAndGet(1);
+
+		float energyToUse = Main.getInstance().getExerciseLearner().getBlockPlaceToUseEnergy();
+		player.useExerciseEnergy(energyToUse);
 	}
 }

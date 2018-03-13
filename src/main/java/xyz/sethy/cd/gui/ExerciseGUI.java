@@ -75,7 +75,7 @@ public class ExerciseGUI extends Gui {
 		// Assign the xPos local variable to 2
 		int xPos = 2;
 		// Assign the yPos local variable to 2
-		int yPos = 2;
+		int yPos = 4;
 		
 		// Sets the openGL colour, of 4f to the red, blue, green, and alpha values to 1.0F, within this current GUI
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
