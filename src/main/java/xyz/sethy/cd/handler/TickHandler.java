@@ -25,6 +25,7 @@ public class TickHandler implements ITickHandler {
 	}
 	
 	private void onTick() {
+		Minecraft.getMinecraft().getLogAgent().logInfo("tick tock");
 		if ((System.currentTimeMillis() - lastHealTime) < TimeUnit.SECONDS.toMillis(1l)) {
 			return;
 		}

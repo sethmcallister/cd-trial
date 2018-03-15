@@ -95,6 +95,10 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
 		this.waterLevel = (this.waterLevel + amount > maxWaterLevel ? maxWaterLevel : this.waterLevel + amount);
 	}
 	
+	public void replenishEnergy(final float amount) {
+		this.exerciseLevel = (this.exerciseLevel + amount > maxExerciseLevel ? maxExerciseLevel : this.exerciseLevel + amount);
+	}
+	
 	public float getCurrentWaterLevel() {
 		return this.waterLevel;
 	}

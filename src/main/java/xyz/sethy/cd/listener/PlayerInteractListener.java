@@ -13,6 +13,7 @@ import xyz.sethy.cd.extended.ExtendedPlayer;
 
 public class PlayerInteractListener {
 	private final Map<Integer, Float> waterInFood;
+	private final Map<Integer, Float> energyInFood;
 	private int waterUsages = 0;
 	
 	public PlayerInteractListener() {
@@ -23,13 +24,19 @@ public class PlayerInteractListener {
 		this.waterInFood.put(39, 0.09f);
 		this.waterInFood.put(40, 0.09f);
 		this.waterInFood.put(282, 1.7f);
+		
+		this.energyInFood = new HashMap<Integer, Float>();
+		this.energyInFood.put(354, 1.03f);
+		this.energyInFood.put(320, 0.09f);
+		this.energyInFood.put(366, 1.0f);
+		this.energyInFood.put(350, 1.02f);
 	}
 	
 	@ForgeSubscribe
 	public void onPlayerInteract(final PlayerInteractEvent event) {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if (event.getResult().equals(event.useItem)) {
-			if (player.getItemInUseDuration() == 1 && player.isEating()) {
+			if (player.getItemInUseDuration() == 1) {
 				ItemStack itemInUse = player.getItemInUse();
 				if (itemInUse.itemID == 282) {
 					if (isDrinkingWater()) {
@@ -40,9 +47,11 @@ public class PlayerInteractListener {
 				}
 				
 				float waterToAdd = getWaterValue(itemInUse);
+				float energyToAdd = getEnergyValue(itemInUse);
+				
 				ExtendedPlayer extendedPlayer = ExtendedPlayer.get(player);
 				extendedPlayer.replenishWater(waterToAdd);
-				Minecraft.getMinecraft().getLogAgent().logInfo("Player has eaten " + player.getItemInUse().getDisplayName());
+				extendedPlayer.replenishEnergy(energyToAdd);
 			}
 		}
 	}
@@ -55,6 +64,14 @@ public class PlayerInteractListener {
 		int id = itemStack.itemID;
 		if (this.waterInFood.containsKey(id))
 			return this.waterInFood.get(id);
+		return 0.0f;
+	}
+	
+	private float getEnergyValue(final ItemStack itemStack) {
+		int id = itemStack.itemID;
+		if (this.energyInFood.containsKey(id))
+			return this.energyInFood.get(id);
+		
 		return 0.0f;
 	}
 }

@@ -3,13 +3,14 @@ package xyz.sethy.cd.listener;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
+import net.minecraftforge.event.Event.Result;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.BlockEvent;
 import xyz.sethy.cd.Main;
 import xyz.sethy.cd.extended.ExtendedPlayer;
 
 public class PlayerBlockBreakListener {
-	private final float removePerBlockBreak = 0.07f;
+	private final float removePerBlockBreak = 0.7f;
 	private final float energyNeededToBreak = 1f;
 	
 	@ForgeSubscribe
@@ -17,7 +18,7 @@ public class PlayerBlockBreakListener {
 		ExtendedPlayer player = ExtendedPlayer.get(Minecraft.getMinecraft().thePlayer);
 		
 		if (player.getCurrentExerciseLevel() < this.energyNeededToBreak) {
-			event.setCanceled(true);
+			event.setResult(Result.DENY);
 			return;
 		}
 		player.useWater(removePerBlockBreak);

@@ -28,12 +28,14 @@ public class ExerciseLearner {
 	
 	public ExerciseLearner() {
 		this.filePath = new File("./cd/exercise.json");
-		this.easierPerBlockWalk = 0.03f;
-		this.easierPerBlockPlaced = 0.02f;
-		this.easierPerAttack = 0.01f;
+		this.easierPerBlockWalk = 1.03f;
+		this.easierPerBlockPlaced = 1.02f;
+		this.easierPerAttack = 1.01f;
 		this.blocksWalked = new AtomicInteger();
 		this.blocksPlaced = new AtomicInteger();
 		this.timesAttacked = new AtomicInteger();
+		
+		load();
 	}
 
 	public void load() {
@@ -71,15 +73,15 @@ public class ExerciseLearner {
 	}
 	
 	public float getBlockWalkToUseEnergy() {
-		return this.easierPerBlockWalk * (this.blocksWalked.get() % this.easierPerBlockWalk);
+		 return 1 - ((this.blocksWalked.get() / this.easierPerBlockWalk) / (this.blocksWalked.get()  + 1));
 	}
 	
 	public float getBlockPlaceToUseEnergy() {
-		return this.easierPerBlockPlaced * (this.blocksPlaced.get() % this.easierPerBlockPlaced);
+		 return 1 - ((this.blocksPlaced.get() / this.easierPerBlockPlaced) / (this.blocksPlaced.get()  + 1));
 	}
 	
 	public float getAttackToUseEnergy() {
-		return this.easierPerAttack * (this.timesAttacked.get() % this.easierPerAttack);
+		 return 1 - ((this.timesAttacked.get() / this.easierPerBlockWalk) / (this.timesAttacked.get()  + 1));
 	}
 	
 	public AtomicInteger getBlocksWalked() {
