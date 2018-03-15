@@ -4,7 +4,9 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import xyz.sethy.cd.exercise.ExerciseLearner;
+import xyz.sethy.cd.gui.ExerciseGUI;
 import xyz.sethy.cd.gui.WaterGUI;
+import xyz.sethy.cd.handler.TickHandler;
 import xyz.sethy.cd.listener.EntityConstructingListener;
 import xyz.sethy.cd.listener.EntityJoinWorldListener;
 import xyz.sethy.cd.listener.PlayerBlockBreakListener;
@@ -38,10 +40,14 @@ public class Main {
     	this.exerciseLearner = new ExerciseLearner();
     	
     	MinecraftForge.EVENT_BUS.register(new WaterGUI());
+    	MinecraftForge.EVENT_BUS.register(new ExerciseGUI());
+
     	MinecraftForge.EVENT_BUS.register(new EntityConstructingListener());
     	MinecraftForge.EVENT_BUS.register(new EntityJoinWorldListener());
     	MinecraftForge.EVENT_BUS.register(new PlayerInteractListener());
     	MinecraftForge.EVENT_BUS.register(new PlayerBlockBreakListener());
+    	
+    	MinecraftForge.EVENT_BUS.register(new TickHandler());
     }
    
     private static void setInstance(Main newInstance) {
