@@ -2,11 +2,13 @@ package xyz.sethy.cd;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import xyz.sethy.cd.exercise.ExerciseLearner;
 import xyz.sethy.cd.gui.ExerciseGUI;
 import xyz.sethy.cd.gui.WaterGUI;
 import xyz.sethy.cd.handler.TickHandler;
+import xyz.sethy.cd.item.EnergyDrinkItem;
 import xyz.sethy.cd.listener.EntityConstructingListener;
 import xyz.sethy.cd.listener.EntityJoinWorldListener;
 import xyz.sethy.cd.listener.PlayerBlockBreakListener;
@@ -24,6 +26,8 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 @NetworkMod(clientSideRequired=true, serverSideRequired=false, channels = {"extendedPlayer"}, packetHandler = WaterPacketHandler.class)
 @Mod(modid = Main.MODID, name = Main.MODID, version = Main.VERSION)
@@ -33,6 +37,7 @@ public class Main {
     public static final Logger LOGGER = Logger.getLogger(MODID); 
     private static Main instance;
     private ExerciseLearner exerciseLearner;
+    private Item energyDrink;
     
     @EventHandler
     public void init(FMLInitializationEvent event) {
@@ -47,7 +52,11 @@ public class Main {
     	MinecraftForge.EVENT_BUS.register(new PlayerInteractListener());
     	MinecraftForge.EVENT_BUS.register(new PlayerBlockBreakListener());
     	
+    	TickRegistry.registerTickHandler(new TickHandler(), Side.SERVER);
+    	
     	MinecraftForge.EVENT_BUS.register(new TickHandler());
+    	
+    	this.energyDrink = new EnergyDrinkItem();
     }
    
     private static void setInstance(Main newInstance) {
