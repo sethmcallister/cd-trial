@@ -14,6 +14,7 @@ import org.apache.commons.io.IOUtils;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -42,7 +43,7 @@ public class ExerciseLearner {
 		File dir = new File("./cd/");
 		if (!dir.exists()) {
 			dir.mkdir();
-			save();
+			save();	
 		}
 		
 		try (FileInputStream inputStream = new FileInputStream(this.filePath)) {
@@ -62,7 +63,8 @@ public class ExerciseLearner {
 		object.addProperty("blocksWalked", this.blocksWalked.get());
 		object.addProperty("blocksPlaced", this.blocksPlaced.get());
 		object.addProperty("timesAttacked", this.timesAttacked.get());
-		String json = object.getAsJsonObject().getAsString();
+		String json = object.getAsJsonObject().toString();
+		Minecraft.getMinecraft().getLogAgent().logInfo(json);
 		
 		try (FileWriter writer = new FileWriter(this.filePath)) {
 			writer.write(json);
