@@ -13,6 +13,6 @@ public class EnergyDrinkItem extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister) {
-		itemIcon = iconRegister.registerIcon("cd:EnergDrink");
+		itemIcon = iconRegister.registerIcon("cd:EnergyDrink");
 	}
 }
