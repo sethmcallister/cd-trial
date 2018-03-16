@@ -32,6 +32,8 @@ public class WaterGUI extends Gui {
 	private int lastZ = Integer.MAX_VALUE;	
 	private long lastDamageTime = 0l;
 	
+	private long lastWaterDeduction = System.currentTimeMillis();
+	
 	public WaterGUI() {
 		super();
 	}
@@ -151,6 +153,15 @@ public class WaterGUI extends Gui {
 		lastZ = z;
 		// Same as line 115 however, for lastX and x
 		lastX = x;
+	}
+	
+	private void deductWater(final ExtendedPlayer player) {
+		if ((System.currentTimeMillis() - this.lastWaterDeduction) < TimeUnit.SECONDS.toMillis(20l)) {
+			return;
+		}
+		
+		this.lastWaterDeduction = System.currentTimeMillis();
+		player.useWater(0.8f);
 	}
 	
 	private float getMultiplier(EntityPlayer player, int x, int z) {
