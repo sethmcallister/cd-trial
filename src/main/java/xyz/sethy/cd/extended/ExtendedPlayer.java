@@ -53,12 +53,17 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
 		return (ExtendedPlayer) player.getExtendedProperties(EXT_PROP_NAME);
 	}
 
+	// Overriding the saveNBTData function in the god/super class
 	@Override
 	public void saveNBTData(NBTTagCompound compound) {
+		// Creates a new NPTTagCompund object
 		NBTTagCompound properties = new NBTTagCompound();
 
+		// 
 		properties.setFloat("currentWaterLevel", this.waterLevel);
 		properties.setFloat("maxWaterLevel", this.maxWaterLevel);
+		properties.setFloat("currentExerciseLevel", this.exerciseLevel);
+		properties.setFloat("maxExerciseLevel", this.maxExerciseLevel);
 		
 		compound.setTag(EXT_PROP_NAME, properties);
 	}
@@ -69,20 +74,25 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
 
 		this.waterLevel = properties.getFloat("currentWaterLevel");
 		this.maxWaterLevel = properties.getFloat("maxWaterLevel");
-		
+		this.exerciseLevel = properties.getFloat("currentExerciseLevel");
+		this.maxExerciseLevel = properties.getFloat("maxExerciseLevel");
 	}
 
+	// Empty code block
 	@Override
 	public void init(Entity entity, World world) {}
 	
+	// Returns a boolean if the player can use an amount of water, removes the amount of water from the player
 	public boolean useWater(final float amount) {
 		this.waterLevel -= amount;
 		if (this.waterLevel < 0) {
 			this.waterLevel = 0.0f;
+			return false;
 		}
 		return true;
 	}
 	
+	// Same as the previous function but for exerciseEnergy
 	public boolean useExerciseEnergy(final float amount) {
 		this.exerciseLevel -= amount;
 		if (this.waterLevel < 0) {
@@ -91,30 +101,37 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
 		return true;
 	}
 	
+	// Function to replenishWater, if the newLevel lever is higher than the maxWaterLevel then it is set the maxWaterLevel, however, add the amount of the waterLevel
 	public void replenishWater(final float amount) {
 		this.waterLevel = (this.waterLevel + amount > maxWaterLevel ? maxWaterLevel : this.waterLevel + amount);
 	}
 	
+	// Same as the previous function but for exerciseLevel
 	public void replenishEnergy(final float amount) {
 		this.exerciseLevel = (this.exerciseLevel + amount > maxExerciseLevel ? maxExerciseLevel : this.exerciseLevel + amount);
 	}
 	
+	// Getting for exercise water
 	public float getCurrentWaterLevel() {
 		return this.waterLevel;
 	}
 	
+	// Setter for exerciseLevel, but with the safe guard of the maxWaterLevel
 	public void setCurrentWaterLevel(float level) {
 		this.waterLevel = level < this.maxWaterLevel ? level : this.maxWaterLevel;
 	}
 	
+	// Getter for max water level
 	public float getMaxWaterLevel() {
 		return this.maxWaterLevel;
 	}
 	
+	// Setter for max water level
 	public void setMaxWaterLevel(final float level) {
 		this.maxWaterLevel = level;
 	}
 	
+	// Next 4 sub-routines are the same as the previous 4, but for exerciseLevel
 	public float getCurrentExerciseLevel() {
 		return this.exerciseLevel;
 	}
@@ -132,14 +149,19 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
 	}
 	
 	public void sync() {
+		// Checks if the world is remote, if it is it returns
 		if(player.worldObj.isRemote)
 			return;
 		
+		// Casts the player EntityPlayer player variable to a EntityPlayerMP
 		EntityPlayerMP playerMP = (EntityPlayerMP) player;
 		
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream(8);
+		// Creates a byte array outputStream with the size of 16
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream(16);
+		// Creates a dataOutputStream with the argument outputStream
 		DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
 	
+		// Try catch block, writes floats for each variable to the dataOutputStream, and then closes the outputStream, and the DataOutputStream
 		try {
 			dataOutputStream.writeFloat(this.maxWaterLevel);
 			dataOutputStream.writeFloat(this.waterLevel);
@@ -151,6 +173,7 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
 			Main.LOGGER.log(Level.SEVERE, e.getMessage(), e.getCause());
 		}
 		
+		// Creates a new custom payload packet, with the name "extendedPlayer" and with the outputStream casted to a Byte Array,and then sends it
 		Packet250CustomPayload packet = new Packet250CustomPayload("extendedPlayer", outputStream.toByteArray());
 		PacketDispatcher.sendPacketToPlayer(packet, (Player)playerMP);
 	}

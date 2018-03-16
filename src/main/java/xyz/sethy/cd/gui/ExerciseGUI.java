@@ -58,6 +58,7 @@ public class ExerciseGUI extends Gui {
 
 		// Calls the function below, with the argument of the entityPlayer which is assigned above
 		doPlayerLocationChecks(entityPlayer);
+		// Calls the doHeal function
 		doHeal();
 		
 		// Assign as a local variable, to save latency getting from another class.
@@ -80,7 +81,7 @@ public class ExerciseGUI extends Gui {
 		
 		// Assign the xPos local variable to 2
 		int xPos = 2;
-		// Assign the yPos local variable to 2
+		// Assign the yPos local variable to 7
 		int yPos = 7;
 		
 		// Sets the openGL colour, of 4f to the red, blue, green, and alpha values to 1.0F, within this current GUI
@@ -91,7 +92,7 @@ public class ExerciseGUI extends Gui {
 		// Bind the texture of this GUI to the resourceLocation static variable
 		Minecraft.getMinecraft().getTextureManager().bindTexture(resourceLocation);
 		
-		// Assign the waterBarWidth to the values of both of the currentWaterLevel, and the maxWaterLevel values, and them multiplied by 101
+		// Assign the waterBarWidth to the values of both of the exerciseLevel, and the maxExerciseLevel values, and them multiplied by 101
 		int barWidth = (int)(((exerciseLevel / player.getMaxExerciseLevel())) * 101);
 		if (barWidth > 101) {
 			barWidth = 101;
@@ -134,13 +135,13 @@ public class ExerciseGUI extends Gui {
 		// Get the multiplier of the biome they are in, or return 1 as, 1 multiplied by a value is the initial value
 		float multiplier = getMultiplier(player, x, z);
 		
-		// Calculates how much water was used by calculating how many blocks they had a moved, and then multiplying that by how water is removed by block of movement, and then multiplied depending on what biome they are in
+		// Calculates how much energy was used by calculating how many blocks they had a moved, and then multiplying that by how energy is removed by block of movement, and then multiplied depending on what biome they are in
 		float energyUsed = Main.getInstance().getExerciseLearner().getBlockWalkToUseEnergy();
 	
 		// Gets the ExtendedPlayer object associated with the player
 		ExtendedPlayer extendedPlayer = ExtendedPlayer.get(player);
 		
-		// Calls the useWater method from inside the ExtenedPlayer object
+		// Calls the useExerciseEnergy method from inside the ExtenedPlayer object
 		extendedPlayer.useExerciseEnergy(energyUsed);
 		Minecraft.getMinecraft().getLogAgent().logInfo("Used " + energyUsed + " energy");
 	
@@ -155,17 +156,22 @@ public class ExerciseGUI extends Gui {
 	}
 	
 	private void doHeal() {
+		// Checks if they where last healed within the last 15 seconds, and the returns if so
 		if ((System.currentTimeMillis() - lastHealTime) < TimeUnit.SECONDS.toMillis(15l)) {
 			return;
 		}
+		// Sets the last heal time to the current time in milliseconds
 		this.lastHealTime = System.currentTimeMillis();
-		EntityPlayer player = (EntityPlayer) Minecraft.getMinecraft().thePlayer;
-		ExtendedPlayer extendedPlayer = ExtendedPlayer.get(player);
+		// Gets the ExtendedPlayer object associated with the player, and then adds 0.7 energy
+		ExtendedPlayer extendedPlayer = ExtendedPlayer.get(Minecraft.getMinecraft().thePlayer);
 		extendedPlayer.setCurrentExerciseLevel(extendedPlayer.getCurrentExerciseLevel() + 0.7f);
 	}
 	
+	// Creates a method with the parameters of player with the type of EntityPlayer, then two ints x, and z
 	private float getMultiplier(EntityPlayer player, int x, int z) {
+		// Gets the biome associate with where the player is standing
 		BiomeGenBase biome = player.worldObj.getBiomeGenForCoords(x, z);
+		// checks if the biome is equal to any of the following, beach, desert, or desertHills, if so then returns the sandMultiplier
 		if (biome.equals(BiomeGenBase.beach) || biome.equals(BiomeGenBase.desert) || biome.equals(BiomeGenBase.desertHills))
 			return this.sandBiomeMultiplier;
 		

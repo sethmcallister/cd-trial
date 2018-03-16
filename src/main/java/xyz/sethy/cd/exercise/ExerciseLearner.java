@@ -19,15 +19,23 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 
 public class ExerciseLearner {
+	// Creates a final variable, with the type of file, and the name filePath
 	private final File filePath;
+	// Creates a final variable, with the type of float, and the name easierPerBlockWalk
 	private final float easierPerBlockWalk;
+	// Creates a final variable, with the type of float, and the easierPerBlockPlaced
 	private final float easierPerBlockPlaced;
+	// Creates a final variable, with the type of float, and the name easierPerAttack
 	private final float easierPerAttack;
+	// Creates a final AtomicInteger, from Java's concurrent classes, with the name of blocksWalked
 	private final AtomicInteger blocksWalked;
+	// Creates a final AtomicInteger, from Java's concurrent classes, with the name of blocksPlaced
 	private final AtomicInteger blocksPlaced;
+	// Creates a final AtomicInteger, from Java's concurrent classes, with the name of timesAttacked
 	private final AtomicInteger timesAttacked;
 	
 	public ExerciseLearner() {
+		// Assigns the previous variables, with their new Objects created, prevents NPEs later on 
 		this.filePath = new File("./cd/exercise.json");
 		this.easierPerBlockWalk = 1.03f;
 		this.easierPerBlockPlaced = 1.02f;
@@ -36,20 +44,27 @@ public class ExerciseLearner {
 		this.blocksPlaced = new AtomicInteger();
 		this.timesAttacked = new AtomicInteger();
 		
+		// Calls the load method below the class initializer method.
 		load();
 	}
 
 	public void load() {
+		// Creates a new File object, with the path of "./cd/" and if it doesn't exist it creates the directory, then returns
 		File dir = new File("./cd/");
 		if (!dir.exists()) {
 			dir.mkdir();
 			save();	
+			return;
 		}
 		
+		// A try with resource block, from Java7, trys to open a FileInputStream, with the filePath variable 
 		try (FileInputStream inputStream = new FileInputStream(this.filePath)) {
+			// Concatenates the inputStream bytes into a String
 			String json = IOUtils.toString(inputStream);
+			// Parses the string into a json object
 			JsonObject object = new JsonParser().parse(json).getAsJsonObject();
 			
+			// Gets each property of the JsonObject; however, we assume they exist
 			this.blocksWalked.set(object.get("blocksWalked").getAsInt());
 			this.blocksPlaced.set(object.get("blocksPlaced").getAsInt());
 			this.timesAttacked.set(object.get("timesAttacked").getAsInt());
@@ -59,13 +74,16 @@ public class ExerciseLearner {
 	}
 	
 	public void save() {
+		// Creates a new JsonObject object
 		JsonObject object = new JsonObject();
+		// Adds properties to the json object, their respective variables
 		object.addProperty("blocksWalked", this.blocksWalked.get());
 		object.addProperty("blocksPlaced", this.blocksPlaced.get());
 		object.addProperty("timesAttacked", this.timesAttacked.get());
+		// Turns the JsonObject into a string
 		String json = object.getAsJsonObject().toString();
-		Minecraft.getMinecraft().getLogAgent().logInfo(json);
-		
+
+		// A try with resource block from Java7, that writes the 'json' variable to the File of the variable filePath, it the flushes, and closes the writer
 		try (FileWriter writer = new FileWriter(this.filePath)) {
 			writer.write(json);
 			writer.flush();
@@ -75,6 +93,7 @@ public class ExerciseLearner {
 		}
 	}
 	
+	// Calculates the amount of energy used when walking a block, gets lower over time
 	public float getBlockWalkToUseEnergy() {
 		 return 1 - ((this.blocksWalked.get() / this.easierPerBlockWalk) / (this.blocksWalked.get()  + 1));
 	}
@@ -87,6 +106,7 @@ public class ExerciseLearner {
 		 return 1 - ((this.timesAttacked.get() / this.easierPerBlockWalk) / (this.timesAttacked.get()  + 1));
 	}
 	
+	// Getters for the each of the variables
 	public AtomicInteger getBlocksWalked() {
 		return this.blocksWalked;
 	}
