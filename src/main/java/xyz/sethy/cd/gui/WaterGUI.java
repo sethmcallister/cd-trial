@@ -144,7 +144,7 @@ public class WaterGUI extends Gui {
 		}
 		
 		if (waterLevel < 1.0f) {
-			if ((System.currentTimeMillis() - this.lastDamageTime) >= TimeUnit.SECONDS.toMillis(1)) {
+			if ((System.currentTimeMillis() - this.lastDamageTime) >= TimeUnit.SECONDS.toMillis(3l)) {
 				player.performHurtAnimation();
 				player.setHealth(player.getHealth() - 2);
 			}
@@ -157,19 +157,24 @@ public class WaterGUI extends Gui {
 	}
 	
 	private void deductWater(final ExtendedPlayer player) {
+		// Checks if water was deducted within the last 20 seconds, and the returns if so
 		if ((System.currentTimeMillis() - this.lastWaterDeduction) < TimeUnit.SECONDS.toMillis(20l)) {
 			return;
 		}
-		
+		// Sets the last time water was deducted to now in milliseconds
 		this.lastWaterDeduction = System.currentTimeMillis();
+		// Removes 0.8f water from the player
 		player.useWater(0.8f);
 	}
 	
+	// Creates a method with the parameters of player with the type of EntityPlayer, then two ints x, and z
 	private float getMultiplier(EntityPlayer player, int x, int z) {
+		// Gets the biome associate with where the player is standing
 		BiomeGenBase biome = player.worldObj.getBiomeGenForCoords(x, z);
+		// checks if the biome is equal to any of the following, beach, desert, or desertHills, if so then returns the sandMultiplier
 		if (biome.equals(BiomeGenBase.beach) || biome.equals(BiomeGenBase.desert) || biome.equals(BiomeGenBase.desertHills))
 			return this.sandBiomeMultiplier;
-		
+		// Checks if the biome is equal to any that is snowy, if so it retuns the snow biome multiplier
 		if (biome.equals(BiomeGenBase.extremeHills) 
 				|| biome.equals(BiomeGenBase.extremeHillsEdge) 
 				|| biome.equals(BiomeGenBase.frozenOcean) 
@@ -177,6 +182,7 @@ public class WaterGUI extends Gui {
 				|| biome.equals(BiomeGenBase.iceMountains)
 				|| biome.equals(BiomeGenBase.icePlains))
 			return this.snowBiomeMultiplier;
+		// If it's not either a snow or a sand biome it will return 1f, which will not affect the amount of water being used
 		return 1f;
 	}
 }

@@ -174,7 +174,7 @@ public class ExerciseGUI extends Gui {
 		// checks if the biome is equal to any of the following, beach, desert, or desertHills, if so then returns the sandMultiplier
 		if (biome.equals(BiomeGenBase.beach) || biome.equals(BiomeGenBase.desert) || biome.equals(BiomeGenBase.desertHills))
 			return this.sandBiomeMultiplier;
-		
+		// Checks if the biome is equal to any that is snowy, if so it retuns the snow biome multiplier
 		if (biome.equals(BiomeGenBase.extremeHills) 
 				|| biome.equals(BiomeGenBase.extremeHillsEdge) 
 				|| biome.equals(BiomeGenBase.frozenOcean) 
@@ -182,6 +182,7 @@ public class ExerciseGUI extends Gui {
 				|| biome.equals(BiomeGenBase.iceMountains)
 				|| biome.equals(BiomeGenBase.icePlains))
 			return this.snowBiomeMultiplier;
+		// If it's not either a snow or a sand biome it will return 1f, which will not affect the amount of energy being used
 		return 1f;
 	}
 }
