@@ -58,6 +58,7 @@ public class ExerciseGUI extends Gui {
 
 		// Calls the function below, with the argument of the entityPlayer which is assigned above
 		doPlayerLocationChecks(entityPlayer);
+		doHeal();
 		
 		// Assign as a local variable, to save latency getting from another class.
 		float exerciseLevel = player.getCurrentExerciseLevel();
