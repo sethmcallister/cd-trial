@@ -7,7 +7,6 @@ import net.minecraftforge.common.MinecraftForge;
 import xyz.sethy.cd.exercise.ExerciseLearner;
 import xyz.sethy.cd.gui.ExerciseGUI;
 import xyz.sethy.cd.gui.WaterGUI;
-import xyz.sethy.cd.handler.TickHandler;
 import xyz.sethy.cd.item.EnergyDrinkItem;
 import xyz.sethy.cd.listener.EntityConstructingListener;
 import xyz.sethy.cd.listener.EntityJoinWorldListener;
@@ -55,8 +54,7 @@ public class Main {
     	MinecraftForge.EVENT_BUS.register(new PlayerBlockBreakListener());
     	MinecraftForge.EVENT_BUS.register(new GUIOpenListener());
     	MinecraftForge.EVENT_BUS.register(new WorldSaveListener());
-    	
-    	TickRegistry.registerTickHandler(new TickHandler(), Side.CLIENT);    	
+   
     	this.energyDrink = new EnergyDrinkItem();
     }
    

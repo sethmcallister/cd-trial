@@ -12,12 +12,16 @@ public class PlayerDamageEntityListener {
 	
 	@ForgeSubscribe
 	public void onPlayerDamageEntity(final LivingAttackEvent event) {
-		if (!(event.source.getEntity() instanceof EntityPlayer)) {
-			EntityPlayer attacked = (EntityPlayer) event.source.getEntity();
-			if (!attacked.getEntityName().equals(Minecraft.getMinecraft().thePlayer.getEntityName()))
-				return;
-		}
+		// Checks if the source of the entity is the instanceof an EntityPlayer, if its not then it turns
+		if ((event.source.getEntity() instanceof EntityPlayer))
+			return;
 		
+		// Checks if the name of the player who attacked is the same as the player who's playing on this client, if it's not then it returns
+		EntityPlayer attacked = (EntityPlayer) event.source.getEntity();
+		if (!attacked.getEntityName().equals(Minecraft.getMinecraft().thePlayer.getEntityName()))
+			return;
+		
+		// Gets the ExtenedPlayer object, and gets if they have enough energy to damage an entity, if not a message is sent to the player, and the event is cancelled
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		ExtendedPlayer extendedPlayer = ExtendedPlayer.get(player);
 		if (extendedPlayer.getCurrentExerciseLevel() < this.energyNeededToAttack) {
@@ -26,9 +30,11 @@ public class PlayerDamageEntityListener {
 			return;
 		}
 		
+		// Increments the amount of times that the player has attacked an entity
 		Main.getInstance().getExerciseLearner().getTimesAttacked().addAndGet(1);
+		// Works out how much energy to use when the player attacked the entity
 		float energyUsed = Main.getInstance().getExerciseLearner().getAttackToUseEnergy();
-		
+		// Will deduct how much energy is used from the player
 		extendedPlayer.useExerciseEnergy(energyUsed);
 	}
 }

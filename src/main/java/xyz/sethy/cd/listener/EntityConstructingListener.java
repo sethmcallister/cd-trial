@@ -10,6 +10,7 @@ public class EntityConstructingListener {
 	
 	@ForgeSubscribe
 	public void onEntityConstructing(final EntityConstructing event) {
+		// Checks if the entity being constructed if an EntityPlayer, and if the ExentedPlayer for that player is null, if so it creates a new one
 		if (event.entity instanceof EntityPlayer && ExtendedPlayer.get((EntityPlayer) event.entity) == null) {
 			ExtendedPlayer player = new ExtendedPlayer((EntityPlayer) event.entity);
 		}

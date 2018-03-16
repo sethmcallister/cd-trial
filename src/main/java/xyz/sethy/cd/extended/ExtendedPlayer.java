@@ -149,8 +149,8 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
 	}
 	
 	public void sync() {
-		// Checks if the world is remote, if it is it returns
-		if(player.worldObj.isRemote)
+		// Checks if the world is remote, if it is not it returns
+		if(!player.worldObj.isRemote)
 			return;
 		
 		// Casts the player EntityPlayer player variable to a EntityPlayerMP
