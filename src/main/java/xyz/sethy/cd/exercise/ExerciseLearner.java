@@ -42,6 +42,7 @@ public class ExerciseLearner {
 		File dir = new File("./cd/");
 		if (!dir.exists()) {
 			dir.mkdir();
+			save();
 		}
 		
 		try (FileInputStream inputStream = new FileInputStream(this.filePath)) {
