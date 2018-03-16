@@ -17,16 +17,21 @@ public class WaterPacketHandler implements IPacketHandler {
 
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
+		// Checks if the packet channel if that of 'extendedPlayer'
 		if (packet.channel.equals("extendedPlayer")) {
+			// if it is the correct packet, then it calls the handleExtendedPlayer method
 			handleExtendedPlayer(packet, player);
 		}
 	}
 	
 	
 	private void handleExtendedPlayer(Packet250CustomPayload packet, Player player) {
+		// Creates a DataInputStream from the packet data variable
 		DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
+		// Gets the extenedPlayer associated with the player
 		ExtendedPlayer extendedPlayer = ExtendedPlayer.get((EntityPlayer) player);
 		try {
+			// Sets the fields in the extendedPlayer based on the values being recieved in the packet
 			extendedPlayer.setMaxWaterLevel(inputStream.readFloat());
 			extendedPlayer.setCurrentWaterLevel(inputStream.readFloat());
 			extendedPlayer.setMaxExerciseLevel(inputStream.readFloat());
