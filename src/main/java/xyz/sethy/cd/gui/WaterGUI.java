@@ -116,6 +116,7 @@ public class WaterGUI extends Gui {
 		ExtendedPlayer extendedPlayer = ExtendedPlayer.get(player);
 		
 		float waterLevel = extendedPlayer.getCurrentWaterLevel();
+		deductWater(extendedPlayer);
 		if (waterLevel < 0) {
 			player.addChatMessage("You're in critical condition, you cannot move any further until you drink.");
 			return;
