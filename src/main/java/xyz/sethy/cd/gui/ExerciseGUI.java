@@ -27,6 +27,7 @@ public class ExerciseGUI extends Gui {
 	private final float sandBiomeMultiplier = 1.03f;
 	private final float snowBiomeMultiplier = 0.25f;
 	private final float energyNeededToSprint = 0.6f;
+	private long lastHealTime = System.currentTimeMillis();
 	
 	// Variables to be used in the calculation of how many blocks they have walked.
 	private int lastX = Integer.MAX_VALUE;
@@ -150,6 +151,16 @@ public class ExerciseGUI extends Gui {
 		lastZ = z;
 		// Same as line 115 however, for lastX and x
 		lastX = x;
+	}
+	
+	private void doHeal() {
+		if ((System.currentTimeMillis() - lastHealTime) < TimeUnit.SECONDS.toMillis(2l)) {
+			return;
+		}
+		this.lastHealTime = System.currentTimeMillis();
+		EntityPlayer player = (EntityPlayer) Minecraft.getMinecraft().thePlayer;
+		ExtendedPlayer extendedPlayer = ExtendedPlayer.get(player);
+		extendedPlayer.setCurrentExerciseLevel(extendedPlayer.getCurrentExerciseLevel() + 0.7f);
 	}
 	
 	private float getMultiplier(EntityPlayer player, int x, int z) {

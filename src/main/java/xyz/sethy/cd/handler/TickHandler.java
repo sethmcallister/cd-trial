@@ -14,14 +14,11 @@ public class TickHandler implements ITickHandler {
 
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
-		
+		onTick();
 	}
 
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
-		if (type.equals(EnumSet.of(TickType.SERVER))) {
-			onTick();
-		}
 	}
 	
 	private void onTick() {

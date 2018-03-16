@@ -52,10 +52,7 @@ public class Main {
     	MinecraftForge.EVENT_BUS.register(new PlayerInteractListener());
     	MinecraftForge.EVENT_BUS.register(new PlayerBlockBreakListener());
     	
-    	TickRegistry.registerTickHandler(new TickHandler(), Side.SERVER);
-    	
-    	MinecraftForge.EVENT_BUS.register(new TickHandler());
-    	
+    	TickRegistry.registerTickHandler(new TickHandler(), Side.CLIENT);    	
     	this.energyDrink = new EnergyDrinkItem();
     }
    
