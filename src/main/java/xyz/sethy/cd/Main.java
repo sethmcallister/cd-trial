@@ -11,6 +11,7 @@ import xyz.sethy.cd.handler.TickHandler;
 import xyz.sethy.cd.item.EnergyDrinkItem;
 import xyz.sethy.cd.listener.EntityConstructingListener;
 import xyz.sethy.cd.listener.EntityJoinWorldListener;
+import xyz.sethy.cd.listener.GUIOpenListener;
 import xyz.sethy.cd.listener.PlayerBlockBreakListener;
 import xyz.sethy.cd.listener.PlayerInteractListener;
 import xyz.sethy.cd.packet.WaterPacketHandler;
@@ -51,6 +52,7 @@ public class Main {
     	MinecraftForge.EVENT_BUS.register(new EntityJoinWorldListener());
     	MinecraftForge.EVENT_BUS.register(new PlayerInteractListener());
     	MinecraftForge.EVENT_BUS.register(new PlayerBlockBreakListener());
+    	MinecraftForge.EVENT_BUS.register(new GUIOpenListener());
     	
     	TickRegistry.registerTickHandler(new TickHandler(), Side.CLIENT);    	
     	this.energyDrink = new EnergyDrinkItem();

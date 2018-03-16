@@ -155,7 +155,7 @@ public class ExerciseGUI extends Gui {
 	}
 	
 	private void doHeal() {
-		if ((System.currentTimeMillis() - lastHealTime) < TimeUnit.SECONDS.toMillis(2l)) {
+		if ((System.currentTimeMillis() - lastHealTime) < TimeUnit.SECONDS.toMillis(15l)) {
 			return;
 		}
 		this.lastHealTime = System.currentTimeMillis();
