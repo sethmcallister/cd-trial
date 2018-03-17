@@ -30,7 +30,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-// Crates a Network mod that requries a client side, but not a server side, it opens the channel 'extendendPlayer', and the packet hander is that of the WaterPacketHander class
+// Crates a Network mod that requires a client side, but not a server side, it opens the channel 'extendendPlayer', and the packet hander is that of the WaterPacketHander class
 @NetworkMod(clientSideRequired=true, serverSideRequired=false, channels = {"extendedPlayer"}, packetHandler = WaterPacketHandler.class)
 // Creates the mod, with the id of the MODID variable, with the name of the same variable, and the version with the variable of VERSION
 @Mod(modid = Main.MODID, name = Main.MODID, version = Main.VERSION)
