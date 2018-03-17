@@ -19,6 +19,8 @@ public class PlayerBlockBreakListener {
 	public void onPlayerBlockBreak(final BlockEvent event) {
 		// Gets the extendedPlayer for the player on the game
 		ExtendedPlayer player = ExtendedPlayer.get(Minecraft.getMinecraft().thePlayer);
+		if (player == null)
+			return;
 		
 		// Checks if they player has enough energy to break a block, if they don't then deny the event
 		if (player.getCurrentExerciseLevel() < this.energyNeededToBreak) {
