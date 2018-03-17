@@ -49,6 +49,8 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
 	
 	// A proceeder that returns the ExtenedPlayer object that is associated with that player.
 	public static final ExtendedPlayer get(final EntityPlayer player) {
+		if (player == null)
+			return null;
 		// Returns an object that is found in the players extedenedProperties, with the same name as EXT_PROP_NAME and then is blindly casted to an ExtendedPlayer object
 		ExtendedPlayer extendedPlayer = (ExtendedPlayer) player.getExtendedProperties(EXT_PROP_NAME);
 		// Checks if the extendedPlayer object is null, if so then it creates a new ExtendedPlayer object for that player
